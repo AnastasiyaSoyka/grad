@@ -1,0 +1,31 @@
+[workspace]
+members = ["grad", "grad-cli", "grad-io", "grad-parse", "grad-rand", "grad-time"]
+default-members = ["grad"]
+resolver = "3"
+
+[workspace.package]
+version = "1.0.0"
+authors = ["Anastasiya Polina Soyka <apsoyka@protonmail.com>"]
+edition = "2024"
+description = "Grad is a command-line interface (CLI) for creating, analyzing, and manipulating arbitrary data."
+readme = "README.md"
+repository = "https://github.com/AnastasiyaSoyka/grad"
+license = "MIT"
+keywords = ["cryptography", "entropy", "password"]
+
+[workspace.lints.rust]
+single_match = "warn"
+single_match_else = "warn"
+needless_match = "warn"
+needless_late_init = "warn"
+redundant_pattern_matching = "warn"
+redundant_pattern = "warn"
+redundant_guards = "warn"
+collapsible_match = "warn"
+match_single_binding = "warn"
+match_same_arms = "warn"
+match_ref_pats = "warn"
+match_bool = "warn"
+needless_bool = "deny"
+unwrap_used = "warn"
+expect_used = "warn"

@@ -1,0 +1,15 @@
+[package]
+name = "grad-io"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+readme.workspace = true
+repository.workspace = true
+license.workspace = true
+keywords.workspace = true
+
+[dependencies]
+thiserror = "2.0.17"
+tracing = "0.1.41"
+zstd = "0.13.3"

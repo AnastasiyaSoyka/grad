@@ -1,0 +1,19 @@
+[package]
+name = "grad-rand"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+readme.workspace = true
+repository.workspace = true
+license.workspace = true
+keywords.workspace = true
+
+[dependencies]
+grad-io = { path = "../grad-io" }
+data-encoding = "2.9.0"
+itertools = "0.14.0"
+rand = "0.9.2"
+rand_chacha = "0.9.0"
+tracing = "0.1.41"
+num = "0.4.3"

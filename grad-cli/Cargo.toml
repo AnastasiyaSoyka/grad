@@ -1,0 +1,17 @@
+[package]
+name = "grad-cli"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+readme.workspace = true
+repository.workspace = true
+license.workspace = true
+keywords.workspace = true
+
+[dependencies]
+grad-parse = { path = "../grad-parse" }
+tracing = "0.1.41"
+clap = { version = "4.5.51", features = ["derive", "unicode"] }
+either = "1.15.0"
+thiserror = "2.0.17"

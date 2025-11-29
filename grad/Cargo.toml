@@ -1,0 +1,23 @@
+[package]
+name = "grad"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+description.workspace = true
+readme.workspace = true
+repository.workspace = true
+license.workspace = true
+keywords.workspace = true
+
+[dependencies]
+grad-time = { path = "../grad-time" }
+grad-rand = { path = "../grad-rand" }
+grad-cli = { path = "../grad-cli" }
+anyhow = "1.0.100"
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.20", features = ["chrono", "json"] }
+rayon = "1.11.0"
+either = "1.15.0"
+
+[lib]
+crate-type = ["lib", "cdylib"]
