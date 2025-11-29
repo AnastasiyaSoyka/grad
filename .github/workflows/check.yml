@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          lfs: true
       - name: Cache
         uses: actions/cache@v4
         with:
@@ -33,6 +35,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          lfs: true
       - name: Cache
         uses: actions/cache@v4
         with:
