@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  LINUX_TARGET: |
+    x86_64-unknown-linux-gnu/release/grad
+    x86_64-unknown-linux-gnu/release/grad.so
+  MSVC_TARGET: |
+    x86_64-pc-windows-msvc/release/grad.exe
+    x86_64-pc-windows-msvc/release/grad.dll
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    name: Check
+    uses: ./.github/workflows/check.yml
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+  build:
+    name: Build
+    uses: ./.github/workflows/build.yml
+    needs: [ check, test ]
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    steps:
+      - name: Download Linux Artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: grad-linux-x86_64-${{ github.SHA }}
+      - name: Download Windows Artifacts
+        uses: actions/download-artifact@v6
+        with:
+          name: grad-windows-x86_64-${{ github.SHA }}
+      - name: List Local Files
+        run: tree .
+      - name: Zip Files
+        run: |
+          zip -jr grad-linux-x86_64.zip ${{ env.LINUX_TARGET }} README.md LICENSE
+          zip -jr grad-windows-x86_64.zip ${{ env.MSVC_TARGET }} README.md LICENSE
+      - name: Create Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.REPOSITORY }}
+          TAG: ${{ github.REF_NAME }}
+        run: |
+          gh release create $TAG \
+            "grad-linux-x86_64.zip#Linux-x86_64.zip" \
+            "grad-windows-x86_64.zip#Windows-x86_64.zip" \
+            --title "${TAG#v}" \
+            --notes "$(git tag -l --format '%(contents:subject)%0a%0a%(contents:body)' $TAG | echo)" \
+            --verify-tag \
+            --latest

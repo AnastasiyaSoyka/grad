@@ -1,0 +1,70 @@
+name: Build
+
+on: workflow_call
+
+env:
+  CARGO_TERM_COLOR: always
+  CACHE_PATHS: |
+    ~/.cargo/bin/
+    ~/.cargo/registry/index/
+    ~/.cargo/registry/cache/
+    ~/.cargo/git/db/
+    target/
+  LINUX_TARGET: |
+    target/x86_64-unknown-linux-gnu/release/grad
+    target/x86_64-unknown-linux-gnu/release/grad.so
+  MSVC_TARGET: |
+    target/x86_64-pc-windows-msvc/release/grad.exe
+    target/x86_64-pc-windows-msvc/release/grad.dll
+
+jobs:
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CACHE_PATHS }}
+          key: build-${{ runner.OS }}-${{ hashFiles('**/Cargo.lock') }}
+      - name: Update Toolchains
+        run: rustup update
+      - name: Add Target
+        run: rustup target add x86_64-unknown-linux-gnu
+      - name: Cargo Build
+        run: cargo build --release --target x86_64-unknown-linux-gnu
+      - name: List Artifacts
+        run: tree target/**/release
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: grad-linux-x86_64-${{ github.SHA }}
+          path: ${{ env.LINUX_TARGET }}
+          if-no-files-found: error
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.CACHE_PATHS }}
+          key: build-${{ runner.OS }}-${{ hashFiles('**/Cargo.lock') }}
+      - name: Update Toolchains
+        run: rustup update
+      - name: Add Target
+        run: rustup target add x86_64-pc-windows-msvc
+      - name: Cargo Build
+        run: cargo build --release --target x86_64-pc-windows-msvc
+      - name: List Artifacts
+        run: tree target/**/release
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v5
+        with:
+          name: grad-windows-x86_64-${{ github.SHA }}
+          path: ${{ env.MSVC_TARGET }}
+          if-no-files-found: error
